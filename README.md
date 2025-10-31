@@ -398,4 +398,3 @@ Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 - 💬 Discord: [Join our community](https://discord.gg/synq)
 - 📖 Docs: [docs.synq.dev](https://docs.synq.dev)
 - 🐛 Issues: [GitHub Issues](https://github.com/yourusername/synq-notifications/issues)
-# notify-core
