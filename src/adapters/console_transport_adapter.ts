@@ -12,7 +12,10 @@ export class ConsoleTransportAdapter implements TransportAdapter {
     this.name = name;
   }
 
-  async send(notification: Notification, preferences: NotificationPreferences): Promise<DeliveryReceipt> {
+  async send(
+    notification: Notification, 
+    // preferences: NotificationPreferences
+  ): Promise<DeliveryReceipt> {
     console.log(`[${this.name.toUpperCase()}] Notification sent:`, {
       id: notification.id,
       title: notification.title,

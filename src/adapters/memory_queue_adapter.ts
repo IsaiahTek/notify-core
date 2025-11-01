@@ -7,7 +7,7 @@ import { QueueAdapter, Notification } from "../types";
 export class MemoryQueueAdapter implements QueueAdapter {
   private queue: Notification[] = [];
   private delayedQueue: Array<{ notification: Notification; executeAt: Date }> = [];
-  private isRunning = false;
+  protected isRunning = false;
   private checkInterval?: any;
 
   async enqueue(notification: Notification): Promise<void> {
