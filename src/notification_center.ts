@@ -12,7 +12,7 @@ export class NotificationCenter {
   private middleware: NotificationMiddleware[];
   private subscribers: Map<string, Set<(notification: Notification) => void>>;
   private eventSubscribers: Map<string, Set<(event: NotificationEvent) => void>>;
-  private unreadSubscribers: Map<string, Set<(count: number) => void>>;
+  private unreadSubscribers: Map<string, Set<(count: number, userId: string) => void>>;
   private isRunning: boolean;
   private workerInterval?: NodeJS.Timeout;
 
@@ -320,7 +320,7 @@ export class NotificationCenter {
 
   onUnreadCountChange(
     userId: string,
-    callback: (count: number) => void
+    callback: (count: number, userId: string) => void
   ): Unsubscribe {
     if (!this.unreadSubscribers.has(userId)) {
       this.unreadSubscribers.set(userId, new Set());
@@ -337,6 +337,7 @@ export class NotificationCenter {
       }
     };
   }
+
 
   // ========== MIDDLEWARE ==========
 
@@ -591,7 +592,7 @@ export class NotificationCenter {
   private notifyUnreadSubscribers(userId: string, count: number): void {
     const subs = this.unreadSubscribers.get(userId);
     if (subs) {
-      subs.forEach(callback => callback(count));
+      subs.forEach(callback => callback(count, userId));
     }
   }
 

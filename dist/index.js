@@ -461,7 +461,7 @@ var NotificationCenter = class {
   notifyUnreadSubscribers(userId, count) {
     const subs = this.unreadSubscribers.get(userId);
     if (subs) {
-      subs.forEach((callback) => callback(count));
+      subs.forEach((callback) => callback(count, userId));
     }
   }
   generateId() {

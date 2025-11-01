@@ -216,7 +216,7 @@ declare class NotificationCenter {
     retryFailed(notificationId: string, channel?: ChannelType): Promise<void>;
     subscribe(userId: string, callback: (notification: Notification) => void): Unsubscribe;
     subscribeToEvents(userId: string, callback: (event: NotificationEvent) => void): Unsubscribe;
-    onUnreadCountChange(userId: string, callback: (count: number) => void): Unsubscribe;
+    onUnreadCountChange(userId: string, callback: (count: number, userId: string) => void): Unsubscribe;
     use(middleware: NotificationMiddleware): void;
     removeMiddleware(name: string): void;
     start(): Promise<void>;
