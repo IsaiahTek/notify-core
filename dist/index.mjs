@@ -373,6 +373,8 @@ var NotificationCenter = class {
     const anyDelivered = receipts.some((r) => r && r.status === "delivered");
     if (receipts.length) {
       notification.status = allFailed ? "failed" : anyDelivered ? "delivered" : "sent";
+    } else {
+      notification.status = "sent";
     }
     await this.storage.save(notification);
   }

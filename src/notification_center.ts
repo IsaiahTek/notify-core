@@ -514,10 +514,13 @@ export class NotificationCenter {
     const allFailed = receipts.every(r => !r || r.status === 'failed');
     const anyDelivered = receipts.some(r => r && r.status === 'delivered');
 
-    if(receipts.length){
+    if (receipts.length) {
       notification.status = allFailed ? 'failed' : (anyDelivered ? 'delivered' : 'sent');
+    } else {
+      // No external transports ran. Assume internal (WebSocket/DB) delivery is successful.
+      notification.status = 'sent';
     }
-    
+
     await this.storage.save(notification);
   }
 
