@@ -371,7 +371,9 @@ var NotificationCenter = class {
     );
     const allFailed = receipts.every((r) => !r || r.status === "failed");
     const anyDelivered = receipts.some((r) => r && r.status === "delivered");
-    notification.status = allFailed ? "failed" : anyDelivered ? "delivered" : "sent";
+    if (receipts.length) {
+      notification.status = allFailed ? "failed" : anyDelivered ? "delivered" : "sent";
+    }
     await this.storage.save(notification);
   }
   startWorker() {
