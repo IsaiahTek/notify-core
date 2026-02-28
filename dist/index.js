@@ -82,6 +82,16 @@ var NotificationCenter = class {
     );
     return notifications;
   }
+  async sendMulticast(input) {
+    const notificationInputs = [];
+    for (const userId of input.userIds) {
+      notificationInputs.push({
+        ...input,
+        userId
+      });
+    }
+    return this.sendBatch(notificationInputs);
+  }
   async schedule(input, when) {
     const notification = await this.send({
       ...input,

@@ -43,6 +43,20 @@ interface NotificationInput {
     actions?: NotificationAction[];
     template?: string;
 }
+interface NotificationMulticastInput {
+    type: string;
+    title: string;
+    body: string;
+    userIds: string[];
+    data?: Record<string, unknown>;
+    priority?: NotificationPriority;
+    category?: string;
+    channels: ChannelType[];
+    scheduledFor?: Date;
+    expiresAt?: Date;
+    actions?: NotificationAction[];
+    template?: string;
+}
 interface NotificationFilters {
     status?: NotificationStatus | NotificationStatus[];
     type?: string | string[];
@@ -197,6 +211,7 @@ declare class NotificationCenter {
     constructor(config: NotificationConfig);
     send(input: NotificationInput): Promise<Notification>;
     sendBatch(inputs: NotificationInput[]): Promise<Notification[]>;
+    sendMulticast(input: NotificationMulticastInput): Promise<Notification[]>;
     schedule(input: NotificationInput, when: Date): Promise<string>;
     getForUser(userId: string, filters?: NotificationFilters): Promise<Notification[]>;
     getUnreadCount(userId: string): Promise<number>;
@@ -285,4 +300,4 @@ declare class MemoryStorageAdapter implements StorageAdapter {
     getReceipts(notificationId: string): Promise<DeliveryReceipt[]>;
 }
 
-export { ChannelFrequency, ChannelPreferences, ChannelType, ConsoleTransportAdapter, DeliveryReceipt, DeliveryStatus, DigestConfig, DigestFrequency, MemoryQueueAdapter, MemoryStorageAdapter, Notification, NotificationAction, NotificationCenter, NotificationConfig, NotificationEvent, NotificationFilters, NotificationInput, NotificationMiddleware, NotificationPreferences, NotificationPriority, NotificationStats, NotificationStatus, NotificationTemplate, QueueAdapter, QuietHours, StorageAdapter, TransportAdapter, Unsubscribe };
+export { ChannelFrequency, ChannelPreferences, ChannelType, ConsoleTransportAdapter, DeliveryReceipt, DeliveryStatus, DigestConfig, DigestFrequency, MemoryQueueAdapter, MemoryStorageAdapter, Notification, NotificationAction, NotificationCenter, NotificationConfig, NotificationEvent, NotificationFilters, NotificationInput, NotificationMiddleware, NotificationMulticastInput, NotificationPreferences, NotificationPriority, NotificationStats, NotificationStatus, NotificationTemplate, QueueAdapter, QuietHours, StorageAdapter, TransportAdapter, Unsubscribe };

@@ -72,6 +72,23 @@ export interface NotificationInput {
   template?: string;
 }
 
+export interface NotificationMulticastInput {
+  type: string;
+  title: string;
+  body: string;
+  userIds: string[];
+  data?: Record<string, unknown>;
+  priority?: NotificationPriority;
+  category?: string;
+  channels: ChannelType[];
+  scheduledFor?: Date;
+  expiresAt?: Date;
+  actions?: NotificationAction[];
+  
+  // Template support
+  template?: string;
+}
+
 export interface NotificationFilters {
   status?: NotificationStatus | NotificationStatus[];
   type?: string | string[];
@@ -100,7 +117,7 @@ export interface ChannelPreferences {
 export interface QuietHours {
   start: string; // "22:00"
   end: string;   // "08:00"
-  timezone?: string; // "America/New_York"
+  timezone?: string; // "America/New York"
 }
 
 export interface NotificationPreferences {

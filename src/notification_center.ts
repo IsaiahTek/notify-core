@@ -1,4 +1,4 @@
-import { NotificationConfig, NotificationInput, NotificationFilters, NotificationPreferences, Unsubscribe, ChannelType, DeliveryReceipt, DigestConfig, NotificationEvent, NotificationMiddleware, NotificationPriority, NotificationStats, NotificationStatus, NotificationTemplate, QueueAdapter, StorageAdapter, TransportAdapter, Notification } from "./types";
+import { NotificationConfig, NotificationInput, NotificationFilters, NotificationPreferences, Unsubscribe, ChannelType, DeliveryReceipt, DigestConfig, NotificationEvent, NotificationMiddleware, NotificationPriority, NotificationStats, NotificationStatus, NotificationTemplate, QueueAdapter, StorageAdapter, TransportAdapter, Notification, NotificationMulticastInput } from "./types";
 // ============================================================================
 // NOTIFICATION CENTER IMPLEMENTATION
 // ============================================================================
@@ -88,6 +88,17 @@ export class NotificationCenter {
       inputs.map(input => this.send(input))
     );
     return notifications;
+  }
+
+  async sendMulticast(input: NotificationMulticastInput): Promise<Notification[]> {
+    const notificationInputs: NotificationInput[] = [];
+    for (const userId of input.userIds) {
+      notificationInputs.push({
+        ...input,
+        userId
+      });
+    }
+    return this.sendBatch(notificationInputs);
   }
 
   async schedule(input: NotificationInput, when: Date): Promise<string> {
