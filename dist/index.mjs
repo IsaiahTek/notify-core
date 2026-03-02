@@ -25,22 +25,20 @@ var NotificationCenter = class {
     await this.storage.save(notification);
     try {
       if (this.queue) {
+        console.log("\u{1F4E6} Notification queued");
         if (notification.scheduledFor) {
+          console.log("\u{1F4E6} Notification scheduled for: " + notification.scheduledFor.toLocaleDateString());
           const delay = notification.scheduledFor.getTime() - Date.now();
+          console.log("\u{1F4E6} Notification delay: " + delay + "ms");
           await this.queue.enqueueDelayed(notification, delay);
         } else {
+          console.log("\u{1F4E6} Notification sent directly after enqueue");
           await this.queue.enqueue(notification);
         }
       } else {
+        console.log("\u{1F4E6} Notification sent directly in sendNow");
         await this.sendNow(notification);
       }
-      await this.applyAfterSendMiddleware(notification);
-      this.notifySubscribers(notification);
-      this.notifyEventSubscribers({
-        type: "sent",
-        notification,
-        timestamp: /* @__PURE__ */ new Date()
-      });
       return notification;
     } catch (error) {
       await this.applyErrorMiddleware(error, notification);
@@ -406,6 +404,13 @@ var NotificationCenter = class {
     } else {
       notification.status = "sent";
     }
+    await this.applyAfterSendMiddleware(notification);
+    this.notifySubscribers(notification);
+    this.notifyEventSubscribers({
+      type: "sent",
+      notification,
+      timestamp: /* @__PURE__ */ new Date()
+    });
     await this.storage.save(notification);
   }
   startWorker() {

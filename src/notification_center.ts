@@ -54,26 +54,20 @@ export class NotificationCenter {
     try {
       // If queue is available, enqueue. Otherwise send directly
       if (this.queue) {
+        console.log("📦 Notification queued");
         if (notification.scheduledFor) {
+          console.log("📦 Notification scheduled for: " + notification.scheduledFor.toLocaleDateString());
           const delay = notification.scheduledFor.getTime() - Date.now();
+          console.log("📦 Notification delay: " + delay + "ms");
           await this.queue.enqueueDelayed(notification, delay);
         } else {
+          console.log("📦 Notification sent directly after enqueue");
           await this.queue.enqueue(notification);
         }
       } else {
+        console.log("📦 Notification sent directly in sendNow");
         await this.sendNow(notification);
       }
-
-      // Apply middleware (afterSend)
-      await this.applyAfterSendMiddleware(notification);
-
-      // Notify subscribers
-      this.notifySubscribers(notification);
-      this.notifyEventSubscribers({
-        type: 'sent',
-        notification,
-        timestamp: new Date()
-      });
 
       return notification;
     } catch (error) {
@@ -559,6 +553,17 @@ export class NotificationCenter {
       // No external transports ran. Assume internal (WebSocket/DB) delivery is successful.
       notification.status = 'sent';
     }
+
+    // Apply middleware (afterSend)
+    await this.applyAfterSendMiddleware(notification);
+
+    // Notify subscribers
+    this.notifySubscribers(notification);
+    this.notifyEventSubscribers({
+      type: 'sent',
+      notification,
+      timestamp: new Date()
+    });
 
     await this.storage.save(notification);
   }
